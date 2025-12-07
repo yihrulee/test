@@ -223,7 +223,7 @@
 
     <div class="header-bar">
         <div class="score-val">SCORE: <span id="score-display">0</span></div>
-        <div class="time-val">TIME: <span id="timer-display">90</span></div>
+        <div class="time-val">TIME: <span id="timer-display">60</span></div>
     </div>
 
     <div class="game-container">
@@ -293,7 +293,8 @@
         
         let stats = { sugar: 50, heart: 50, calcium: 50, growth: 50 };
         let score = 0;
-        let timeLeft = 90;
+        // 修正：JS 變數預設 60
+        let timeLeft = 60;
         let gameActive = false;
         let gameLoopTimer = null;
         let eventTimeoutTimer = null; 
@@ -319,6 +320,7 @@
 
         function showStartScreen() {
             const overlay = document.getElementById("overlay");
+            // 修正：新增提示語，並將說明文字改為 60 秒
             overlay.innerHTML = `
                 <h1 style="font-size: 50px; color: #ffeb3b; margin:0 0 10px 0;">內分泌協調高手</h1>
                 <div class="step-container">
@@ -340,8 +342,9 @@
                         <div class="step-desc">選擇正確激素</div>
                     </div>
                 </div>
-                <p style="font-size: 20px; color: #b0bec5;">90 秒極速挑戰・答錯扣 500 分</p>
+                <p style="font-size: 20px; color: #b0bec5;">60 秒極速挑戰・答錯扣 500 分</p>
                 <button class="start-btn" onclick="startGame()">開始挑戰</button>
+                <p style="margin-top: 15px; font-size: 18px; color: #81d4fa; font-weight: bold;">平板、手機遊戲，請「直式」呈現為佳</p>
             `;
             overlay.classList.remove("hidden");
         }
@@ -364,7 +367,8 @@
         function startGame() {
             stats = { sugar: 50, heart: 50, calcium: 50, growth: 50 };
             score = 0;
-            timeLeft = 90; 
+            // 修正：遊戲開始時設定為 60 秒
+            timeLeft = 60; 
             gameActive = true;
             processingTurn = false;
             lastEventIndex = -1; 

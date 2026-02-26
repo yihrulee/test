@@ -1,0 +1,1325 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>無性生殖｜貪吃蛇闖關評量（單檔）</title>
+  <style>
+    :root{
+      --bg:#070b18;
+      --panel: rgba(255,255,255,.08);
+      --panel2: rgba(255,255,255,.12);
+      --line: rgba(255,255,255,.14);
+      --text:#eef3ff;
+      --muted: rgba(238,243,255,.70);
+      --shadow: 0 24px 70px rgba(0,0,0,.50);
+
+      --good-b:#22c55e;
+      --good-bg: rgba(34,197,94,.16);
+      --bad-b:#ef4444;
+      --bad-bg: rgba(239,68,68,.16);
+
+      --btn:#2b59ff;
+      --btnText:#ffffff;
+      --btn2: rgba(255,255,255,.10);
+
+      --focus:#7aa2ff;
+    }
+    *{box-sizing:border-box}
+    html, body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 650px at 15% 15%, rgba(80,130,255,.32), transparent 60%),
+        radial-gradient(900px 600px at 85% 25%, rgba(0,220,180,.20), transparent 55%),
+        radial-gradient(850px 520px at 45% 105%, rgba(255,220,120,.14), transparent 55%),
+        linear-gradient(180deg, #070b18, #0a1636);
+      overflow-x:hidden;
+      overflow-y:auto;
+    }
+
+    .app{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      padding: 14px 14px 6px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+    }
+    h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.4px;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.4;
+    }
+    .hud{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    
+    .hudInGame{
+      justify-content: center;
+      padding: 10px 10px 12px;
+      margin: 0 0 10px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 14px 40px rgba(0,0,0,.18);
+    }
+    .hudInGame .chip{
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 40px rgba(0,0,0,.20);
+      font-weight: 900;
+      font-size: 12px;
+      color: var(--text);
+      white-space: nowrap;
+      backdrop-filter: blur(10px);
+    }
+    .chip b{ font-size: 13px; }
+
+    main{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      padding: 8px 14px 16px;
+      gap: 14px;
+    }
+
+    .stage{
+      width: min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    @media (max-width: 640px){
+      .stage{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .canvasWrap{
+      padding: 12px;
+    }
+    canvas{
+      width: 100%;
+      touch-action: none;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      display:block;
+    }
+
+    .side{
+      padding: 12px;
+      display:grid;
+      gap: 10px;
+    }
+    .side .panel{
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .panel h2{
+      margin:0 0 6px;
+      font-size: 14px;
+      letter-spacing:.3px;
+    }
+    .panel p{
+      margin:0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.55;
+    }
+    .legend{
+      display:grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .legendRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.09);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .pill{
+      font-weight: 900;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.14);
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    button{
+      appearance:none;
+      border:0;
+      border-radius: 12px;
+      padding: 9px 11px;
+      font-weight: 900;
+      cursor:pointer;
+      transition: transform .06s ease, opacity .2s ease;
+    }
+    button:active{ transform: translateY(1px); }
+    .btn{
+      background: var(--btn);
+      color: var(--btnText);
+    }
+    .btn.secondary{
+      background: var(--btn2);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .btn:focus-visible{
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(122,162,255,.35);
+    }
+
+    /* feedback uses required classes */
+    .feedback{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      color: var(--text);
+      font-size: 12px;
+      line-height:1.55;
+      display:none;
+    }
+    .feedback.show{ display:block; }
+    .correct{
+      border: 2px solid var(--good-b) !important;
+      background: var(--good-bg) !important;
+    }
+    .incorrect{
+      border: 2px solid var(--bad-b) !important;
+      background: var(--bad-bg) !important;
+    }
+
+    /* overlay */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      z-index: 99;
+    }
+    .overlay.show{ display:flex; pointer-events:auto; }
+    .modal{
+      width: min(720px, 100%);
+      background: rgba(15, 25, 55, .92);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.65);
+      padding: 16px;
+    }
+    .modal h3{
+      margin:0 0 6px;
+      font-size: 18px;
+    }
+    .modal .small{
+      margin:0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .opt{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+      user-select:none;
+      margin: 8px 0;
+    }
+    .opt input{ transform: scale(1.15); }
+    .opt:focus-within{
+      box-shadow: 0 0 0 4px rgba(122,162,255,.25);
+    }
+    .modal .row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      justify-content:flex-end;
+    }
+    .modal .explain{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+      font-size: 13px;
+      display:none;
+    }
+    .modal .explain.show{ display:block; }
+
+    /* touch controls */
+    .touch{
+      display:flex;
+      gap: 14px;
+      justify-content:center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+      touch-action: manipulation;
+    }
+    .touch button{
+      width: 84px;
+      height: 84px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.12);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.18);
+      font-size: 28px;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(0,0,0,.30);
+      touch-action: manipulation;
+    }
+    .touch button:active{
+      transform: translateY(1px) scale(.99);
+      background: rgba(255,255,255,.16);
+    }
+    @media (hover:hover) and (pointer:fine){
+      /* 電腦滑鼠操作時隱藏觸控大按鈕，避免擠壓版面 */
+      .touch{ display:none !important; }
+    }
+  
+    .goalBanner{
+      width:100%;
+      display:flex;
+      align-items:baseline;
+      justify-content:center;
+      gap:10px;
+      padding: 4px 6px 10px;
+      margin: 0 0 6px;
+      font-weight: 1000;
+      letter-spacing: .6px;
+    }
+    .goalBanner .label{
+      font-size: 16px;
+      color: rgba(238,243,255,.72);
+    }
+    .goalBanner .goal{
+      font-size: 24px;
+      color: var(--goalColor, #60a5fa);
+      text-shadow: 0 10px 26px rgba(0,0,0,.35);
+    }
+
+    .summaryBottom{
+      width: min(980px, 100%);
+      margin: 14px auto 0;
+      padding: 12px;
+    }
+    .summaryTitle{
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing: .3px;
+    }
+    .summaryText{
+      font-size: 12px;
+      color: rgba(238,243,255,.82);
+      line-height: 1.7;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .summaryGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .summaryBox{
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      color: rgba(238,243,255,.82);
+      font-size: 12px;
+    }
+    .summaryBox b{
+      display:block;
+      color: rgba(238,243,255,.92);
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+    @media (max-width: 640px){
+      .summaryGrid{ grid-template-columns: 1fr; }
+      .goalBanner .goal{ font-size: 22px; }
+    }
+
+  
+    .goalOps{
+      margin: 10px 10px 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .goalOpsText{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .goalOpsText b{ color: var(--text); }
+    .kbd{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color: rgba(238,243,255,.90);
+      font-weight: 900;
+      font-size: 12px;
+    }
+    .goalOpsBtns{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+  
+    /* Header centered & aligned with game width */
+    header{
+      padding: 18px 14px 10px;
+      display:flex;
+      justify-content:center;
+    }
+    .headerWrap{
+      width: min(980px, 100%);
+      text-align:center;
+    }
+    .headerTitle{
+      margin: 0;
+      font-size: 20px;
+      letter-spacing:.6px;
+      font-weight: 1000;
+    }
+    .headerSub{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* HUD layout like screenshot */
+    .hudInGame{
+      padding: 14px 14px;
+      margin: 0 0 12px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 14px 40px rgba(0,0,0,.18);
+    }
+    .hudGrid{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .hudLeft{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      border-radius: 16px;
+      padding: 10px 10px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .goalBanner{
+      width:100%;
+      display:flex;
+      align-items:baseline;
+      justify-content:center;
+      gap: 12px;
+      padding: 6px 6px 10px;
+      margin: 0;
+      font-weight: 1000;
+      letter-spacing: .7px;
+    }
+    .label{
+      font-size: 18px;
+      color: rgba(238,243,255,.72);
+    }
+    .goal{
+      font-size: clamp(30px, 4.2vw, 52px);
+      color: var(--goalColor, #60a5fa);
+      text-shadow: 0 10px 26px rgba(0,0,0,.35);
+      line-height: 1.05;
+    }
+    .chipsRow{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 6px 6px 2px;
+    }
+    .chipsRow .chip{
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .opBox{
+      border-radius: 16px;
+      padding: 14px 14px;
+      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .opTitle{
+      font-size: 16px;
+      font-weight: 1000;
+      letter-spacing: .4px;
+    }
+    .opLine{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .opBtns{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .opBtns .btn{
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px){
+      .hudGrid{ grid-template-columns: 1fr; }
+      .opBtns{ justify-content:center; }
+      .opBox{ text-align:center; }
+    }
+
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="headerWrap">
+      <h1 class="headerTitle">無性生殖｜貪吃蛇闖關評量</h1>
+      <p class="headerSub">方向鍵/WASD（平板可用大方向鍵）移動；按「開始 / 暫停」開始或暫停。</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="stage">
+      <section class="card canvasWrap" aria-label="遊戲畫面">
+
+        <div class="hud hudInGame" aria-label="遊戲狀態（上方）">
+          <div class="hudGrid">
+            <!-- 左：操作 -->
+            <div class="hudRight opBox" aria-label="操作">
+              <div class="opTitle">操作</div>
+              <div class="opLine">方向鍵／WASD 移動・<span class="kbd">Enter</span> 開始／暫停。</div>
+              <div class="opBtns">
+                <button class="btn" id="startBtn" type="button">開始 / 暫停</button>
+                <button class="btn secondary" id="restartBtn" type="button">重新開始</button>
+              </div>
+            </div>
+
+            <!-- 右：目標＋狀態 -->
+            <div class="hudLeft" aria-label="目標與狀態">
+              <div class="goalBanner" aria-label="目標">
+                <span class="label">目標：</span>
+                <span id="goalBig" class="goal">—</span><span id="goalName" style="display:none">—</span>
+              </div>
+              <div class="chipsRow" aria-label="狀態列">
+                <span class="chip">收集：<b id="goalCount">0</b>/<span id="goalNeed">3</span></span>
+                <span class="chip">分數：<b id="score">0</b></span>
+                <span class="chip">生命：<b id="lives">5</b></span>
+                <span class="chip">關卡：<b id="level">1</b>/6</span>
+              </div>
+            </div>
+          </div>
+        </div>
+<canvas id="game" width="840" height="560" aria-label="貪吃蛇遊戲畫布"></canvas>
+        <div class="touch" aria-label="觸控方向鍵">
+          <button type="button" id="tUp" aria-label="上">▲</button>
+        </div>
+        <div class="touch">
+          <button type="button" id="tLeft" aria-label="左">◀</button>
+          <button type="button" id="tDown" aria-label="下">▼</button>
+          <button type="button" id="tRight" aria-label="右">▶</button>
+        </div>
+      </section>
+</div>
+  
+    <!-- Bottom summary (in-game) -->
+    <section class="card summaryBottom" aria-label="遊戲摘要">
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+      <h2 class="summaryTitle">遊戲摘要</h2>
+      <div id="summaryText" class="summaryText"></div>
+      <div class="actions" style="margin-top:10px;">
+        <button class="btn secondary" id="playAgain" type="button" style="display:none;">再玩一次</button>
+        <a class="btn" id="nextPageBtn" href="./3.html" style="display:none;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">進入下一頁 →</a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Overlay: Start (Instruction Page) -->
+<div class="overlay show" id="startOverlay" role="dialog" aria-modal="true" aria-label="遊戲說明頁">
+  <div class="modal">
+    <h3>🎮 遊戲說明｜無性生殖貪吃蛇</h3>
+    <p class="small">這是一個「玩中評量」的闖關遊戲：吃對生物卡就加分並累積蒐集數；吃錯會扣分與扣生命。每關蒐集滿 <b>3</b> 個目標即可進入下一關。</p>
+
+    <div class="explain show" style="display:block">
+      <b style="color:rgba(238,243,255,.92)">操作方式</b><br>
+      • 電腦：方向鍵 / WASD 移動，Enter 開始/暫停。<br>
+      • 平板：使用畫面下方的大方向鍵 ▲◀▼▶。<br><br>
+
+      <b style="color:rgba(238,243,255,.92)">闖關規則</b><br>
+      1) 每關會指定「目標繁殖方式」。<br>
+      2) 吃到 <b>目標</b>：+10 分、蒐集 +1、蛇變長。<br>
+      3) 吃到 <b>非目標/迷思</b>（如受精、減數分裂、種子）：扣分、扣 1 生命、蛇縮短。<br>
+      4) 每關蒐集滿 <b>3</b> 個目標 → 自動進入下一關（共 6 關）。<br><br>
+
+      <b style="color:rgba(238,243,255,.92)">小提醒</b><br>
+      • 孢子 ≠ 種子。<br>
+      • 受精、減數分裂不是無性生殖方式。<br>
+    </div>
+
+    <div class="row">
+      <button class="btn" id="overlayStart">進入遊戲</button>
+      <button class="btn secondary" id="overlayClose">我已了解（關閉說明）</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+(() => {
+  // ====== CONTENT POOLS ======
+  const GROUPS = [
+    { id:"split",  name:"分裂生殖",  need:3, color:"#60a5fa", hint:"一分為二（常見單細胞）" },
+    { id:"bud",    name:"出芽生殖",  need:3, color:"#34d399", hint:"長出芽體，成熟後分離或成群" },
+    { id:"frag",   name:"斷裂生殖",  need:3, color:"#f59e0b", hint:"斷裂 + 再生能力" },
+    { id:"spore",  name:"孢子繁殖",  need:3, color:"#a78bfa", hint:"形成→散播→萌發；孢子≠種子" },
+    { id:"veg",    name:"營養器官繁殖", need:3, color:"#f97316", hint:"根/莖/葉等長成新植株" },
+    { id:"tissue", name:"組織培養", need:3, color:"#22c55e", hint:"無菌操作＋培養基＋馴化移植" }
+  ];
+
+  const ITEMS = [
+    // split
+    { id:"amoeba", name:"變形蟲", short:"變形", group:"split", note:"單細胞一分為二" },
+    { id:"bacteria", name:"細菌", short:"細菌", group:"split", note:"二分裂" },
+    { id:"paramecium", name:"草履蟲", short:"草履", group:"split", note:"分裂生殖" },
+
+    // bud
+    { id:"hydra", name:"水螅", short:"水螅", group:"bud", note:"長芽" },
+    { id:"yeast", name:"酵母菌", short:"酵母", group:"bud", note:"出芽" },
+
+    // frag
+    { id:"planaria", name:"渦蟲", short:"渦蟲", group:"frag", note:"切段再生" },
+    { id:"starfish", name:"海星", short:"海星", group:"frag", note:"斷裂再生（教材例）" },
+
+    // spore
+    { id:"mold", name:"黴菌/真菌", short:"黴菌", group:"spore", note:"孢子散播" },
+    { id:"fern", name:"蕨類", short:"蕨類", group:"spore", note:"孢子" },
+    { id:"moss", name:"苔蘚", short:"苔蘚", group:"spore", note:"孢子" },
+
+    // veg
+    { id:"potato", name:"馬鈴薯（塊莖）", short:"馬鈴", group:"veg", note:"塊莖發芽" },
+    { id:"onion", name:"洋蔥（鱗莖）", short:"洋蔥", group:"veg", note:"鱗莖" },
+    { id:"strawberry", name:"草莓（匍匐莖）", short:"草莓", group:"veg", note:"匍匐莖" },
+
+    // tissue
+    { id:"orchid", name:"蝴蝶蘭（組織培養）", short:"蘭花", group:"tissue", note:"大量繁殖" },
+    { id:"banana", name:"香蕉苗（組織培養）", short:"香蕉", group:"tissue", note:"健康苗" },
+
+    // misconceptions / not asexual (always wrong)
+    { id:"fertilization", name:"受精", short:"受精", group:"not", note:"需要配子結合（有性）" },
+    { id:"meiosis", name:"減數分裂", short:"減數", group:"not", note:"形成配子相關（非無性方式）" },
+    { id:"seed", name:"種子", short:"種子", group:"not", note:"常與有性生殖相關" },
+  ];
+
+  // ====== GAME CORE (grid snake) ======
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+
+  const ui = {
+    goalName: document.getElementById('goalName'),
+    goalBig: document.getElementById('goalBig'),
+    goalCount: document.getElementById('goalCount'),
+    goalNeed: document.getElementById('goalNeed'),
+    score: document.getElementById('score'),
+    lives: document.getElementById('lives'),
+    level: document.getElementById('level'),
+    feedback: document.getElementById('feedback'),    summaryText: document.getElementById('summaryText'),
+    playAgain: document.getElementById('playAgain'),
+  };
+
+  const startOverlay = document.getElementById('startOverlay');
+
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  let GRID_W = 28;
+  let GRID_H = 18;
+  let CELL = 28;     // will be computed
+  let offsetX = 0;
+  let offsetY = 0;
+
+  let running = false;
+  let paused = true;
+
+  let levelIdx = 0;
+  let goalGroup = GROUPS[levelIdx].id;
+  let goalNeed = GROUPS[levelIdx].need;
+  let goalCount = 0;
+
+  let score = 0;
+  let lives = 5;
+
+  const stats = Object.fromEntries(GROUPS.map(g => [g.id, { correct:0, wrong:0 }]));
+  let totalWrong = 0;
+
+  // snake
+  let snake = [];
+  let dir = {x:1, y:0};
+  let nextDir = {x:1, y:0};
+
+  // foods (multiple)
+  let foods = []; // {x,y,item}
+
+  // timing
+  let lastTick = 0;
+  let stepMs = 240; // 速度（毫秒/步）- 數字越大越慢
+
+  function setFeedback(type, html){
+    ui.feedback.classList.remove('correct','incorrect','show');
+    if(type === 'ok') ui.feedback.classList.add('correct');
+    if(type === 'bad') ui.feedback.classList.add('incorrect');
+    ui.feedback.innerHTML = html;
+    ui.feedback.classList.add('show');
+    // auto fade
+    clearTimeout(setFeedback._t);
+    setFeedback._t = setTimeout(() => ui.feedback.classList.remove('show'), 1800);
+  }
+
+  function resize(){
+    const wrap = canvas.getBoundingClientRect();
+    // keep a nice grid based on width
+    const targetW = Math.floor(wrap.width);
+    // choose cell size so that GRID_W fits; also keep height in ratio
+    CELL = Math.max(18, Math.min(34, Math.floor(targetW / GRID_W)));
+    const w = GRID_W * CELL;
+    const h = GRID_H * CELL;
+
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.height = (h) + 'px';
+
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    offsetX = 0;
+    offsetY = 0;
+  }
+
+  function randInt(n){ return Math.floor(Math.random() * n); }
+  function posKey(x,y){ return x + "," + y; }
+
+  function resetGame(){
+    levelIdx = 0;
+    goalGroup = GROUPS[levelIdx].id;
+    goalNeed = GROUPS[levelIdx].need;
+    goalCount = 0;
+
+    score = 0;
+    lives = 5;
+    totalWrong = 0;
+
+    for(const g of GROUPS){
+      stats[g.id].correct = 0;
+      stats[g.id].wrong = 0;
+          }
+
+    const cx = Math.floor(GRID_W/2);
+    const cy = Math.floor(GRID_H/2);
+
+    snake = [];
+    for(let i=0;i<6;i++){
+      snake.push({x: cx - i, y: cy});
+    }
+    dir = {x:1,y:0};
+    nextDir = {x:1,y:0};
+
+    foods = [];
+    spawnFoodSet(4);
+
+    running = false;
+    paused = true;
+    ui.feedback.classList.remove('show','correct','incorrect');
+
+
+    ui.playAgain.style.display = 'none';
+    const nextBtn = document.getElementById('nextPageBtn');
+    if(nextBtn) nextBtn.style.display = 'none';
+    ui.summaryText.innerHTML = buildLiveSummaryHTML();
+
+    updateHUD();
+  }
+
+  function updateHUD(){
+    ui.goalName.textContent = GROUPS[levelIdx]?.name || "—";
+
+    const g = GROUPS[levelIdx] || null;
+    if(g){
+      document.documentElement.style.setProperty('--goalColor', g.color);
+      if(ui.goalBig) ui.goalBig.textContent = g.name;
+      ui.goalName.textContent = g.name; // hidden backup
+    }
+    ui.goalCount.textContent = String(goalCount);
+    ui.goalNeed.textContent = String(goalNeed);
+    ui.score.textContent = String(score);
+    ui.lives.textContent = String(lives);
+    ui.level.textContent = String(levelIdx + 1);
+  }
+
+  function randomItemForSet(goalId){
+    // ensure at least one correct
+    // We'll pick 1 correct item and fill the rest with wrongs, including misconceptions sometimes.
+    const correctPool = ITEMS.filter(it => it.group === goalId);
+    const wrongPool = ITEMS.filter(it => it.group !== goalId);
+
+    const list = [];
+    // 1 correct
+    list.push(correctPool[randInt(correctPool.length)]);
+    // others
+    while(list.length < 4){
+      // 30% chance pick a "not" misconception
+      let pick;
+      if(Math.random() < 0.30){
+        const notPool = ITEMS.filter(it => it.group === "not");
+        pick = notPool[randInt(notPool.length)];
+      }else{
+        pick = wrongPool[randInt(wrongPool.length)];
+      }
+      // avoid duplicates by id
+      if(!list.some(x => x.id === pick.id)) list.push(pick);
+    }
+    // shuffle
+    for(let i=list.length-1;i>0;i--){
+      const j = randInt(i+1);
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    return list;
+  }
+
+  function findEmptyCell(occupied){
+    for(let tries=0; tries<5000; tries++){
+      const x = randInt(GRID_W);
+      const y = randInt(GRID_H);
+      const k = posKey(x,y);
+      if(!occupied.has(k)) return {x,y};
+    }
+    // fallback
+    return {x:0,y:0};
+  }
+
+  function spawnFoodSet(count=4){
+    const occupied = new Set(snake.map(s => posKey(s.x,s.y)));
+    foods.forEach(f => occupied.add(posKey(f.x,f.y)));
+
+    const items = randomItemForSet(goalGroup);
+    foods = [];
+
+    for(let i=0;i<count;i++){
+      const p = findEmptyCell(occupied);
+      occupied.add(posKey(p.x,p.y));
+      foods.push({x:p.x, y:p.y, item: items[i % items.length]});
+    }
+  }
+
+  function replaceOneFood(index){
+    const occupied = new Set(snake.map(s => posKey(s.x,s.y)));
+    foods.forEach((f,idx) => { if(idx !== index) occupied.add(posKey(f.x,f.y)); });
+
+    // choose a new item: mostly wrong to keep variety, but guarantee there is still at least 1 correct on board
+    const hasCorrect = foods.some((f,idx) => idx !== index && f.item.group === goalGroup);
+    let item;
+    if(!hasCorrect){
+      const pool = ITEMS.filter(it => it.group === goalGroup);
+      item = pool[randInt(pool.length)];
+    }else{
+      const pool = ITEMS.filter(it => it.group !== goalGroup);
+      item = pool[randInt(pool.length)];
+    }
+    const p = findEmptyCell(occupied);
+    foods[index] = {x:p.x, y:p.y, item};
+  }
+
+  function isOpposite(a,b){ return a.x === -b.x && a.y === -b.y; }
+
+  function setDir(nx, ny){
+    const nd = {x:nx, y:ny};
+    if(isOpposite(dir, nd)) return; // prevent reverse
+    nextDir = nd;
+  }
+
+  function collisionWithSelf(x,y){
+    return snake.some((s, i) => i>0 && s.x === x && s.y === y);
+  }
+
+  function step(){
+    dir = nextDir;
+
+    const head = snake[0];
+    const nx = head.x + dir.x;
+    const ny = head.y + dir.y;
+
+    // wall collision -> lose life, reset snake length & position
+    if(nx < 0 || nx >= GRID_W || ny < 0 || ny >= GRID_H || collisionWithSelf(nx,ny)){
+      lives--;
+      setFeedback('bad', `❌ 撞到了！扣 1 生命。<span style="color:var(--muted)">（小心牆/自己）</span>`);
+      if(lives <= 0){
+        endGame(false);
+        return;
+      }
+      // soft reset position, keep level progress
+      const cx = Math.floor(GRID_W/2), cy = Math.floor(GRID_H/2);
+      snake = [];
+      for(let i=0;i<6;i++) snake.push({x: cx - i, y: cy});
+      dir = {x:1,y:0};
+      nextDir = {x:1,y:0};
+      spawnFoodSet(4);
+      updateHUD();
+      return;
+    }
+
+    // move
+    snake.unshift({x:nx, y:ny});
+
+    // eat?
+    const idx = foods.findIndex(f => f.x === nx && f.y === ny);
+    if(idx >= 0){
+      const it = foods[idx].item;
+
+      const isCorrect = (it.group === goalGroup);
+      if(isCorrect){
+        score += 10;
+        goalCount += 1;
+        stats[goalGroup].correct += 1;
+        setFeedback('ok', `✅ 正確！吃到「${it.name}」→ 屬於 <b>${GROUPS[levelIdx].name}</b>。<span style="color:var(--muted)">（${it.note}）</span>`);
+        // replace all foods for fresh choices
+        spawnFoodSet(4);
+      }else{
+        score -= (it.group === "not" ? 12 : 8);
+        lives -= 1;
+        totalWrong += 1;
+        stats[goalGroup].wrong += 1;
+
+        // shrink a bit
+        if(snake.length > 4) snake.pop();
+        if(snake.length > 4) snake.pop();
+
+        const why = it.group === "not"
+          ? `這是「${it.name}」，不是無性生殖方式。`
+          : `「${it.name}」更像是「${GROUPS.find(g => g.id === it.group)?.name || "其他" }」。`;
+
+        setFeedback('bad', `❌ 吃錯了！${why} <span style="color:var(--muted)">（${it.note}）</span>`);
+        // replace only this food to keep challenge
+        replaceOneFood(idx);
+
+        if(lives <= 0){
+          endGame(false);
+          return;
+        }
+      }
+
+      // if ate, keep tail (we already added head; to grow, we do not pop). If not eaten, pop tail below.
+      // For correct eat we also keep tail; for wrong we already popped extra above; still should keep movement growth logic.
+      // We'll treat any eat as "no normal tail pop", so do nothing.
+    }else{
+      // normal movement
+      snake.pop();
+    }
+
+    updateHUD();
+
+    // check goal completion => advance level (no quiz gate)
+    if(goalCount >= goalNeed){
+      advanceLevel();
+    }
+  }
+
+  
+  function advanceLevel(){
+    // brief pause so player notices the transition
+    paused = true;
+    setFeedback('ok', `🎯 達標！進入下一關：<b>${nextLevelName()}</b>`);
+    setTimeout(() => {
+      levelIdx++;
+      if(levelIdx >= GROUPS.length){
+        endGame(true);
+        return;
+      }
+      goalGroup = GROUPS[levelIdx].id;
+      goalNeed = GROUPS[levelIdx].need; // now 3
+      goalCount = 0;
+
+      // fresh foods
+      spawnFoodSet(4);
+
+      paused = false;
+      running = true;
+      updateHUD();
+    }, 650);
+  }
+
+  function nextLevelName(){
+    const n = GROUPS[levelIdx + 1];
+    return n ? n.name : "結算";
+  }
+
+function endGame(success){
+    running = false;
+    paused = true;
+
+    const msg = success
+      ? `🎉 通關成功！總分 <b>${score}</b>，總失誤 <b>${totalWrong}</b>。`
+      : `💥 遊戲結束！總分 <b>${score}</b>，總失誤 <b>${totalWrong}</b>。`;
+    ui.summaryText.innerHTML = msg + "<br><br>" + buildSummaryHTML();
+
+    ui.playAgain.style.display = 'inline-flex';
+    const nextBtn = document.getElementById('nextPageBtn');
+    if(nextBtn) nextBtn.style.display = 'inline-flex';
+
+    setFeedback(success ? 'ok' : 'bad', success ? "✅ 完成所有關卡！" : "❌ 生命歸零，結束。");
+  }
+
+  function buildLiveSummaryHTML(){
+    const g = GROUPS[levelIdx];
+    const title = g ? `<span class=\"pill\">目前目標：${g.name}</span>` : '';
+    const head = `${title} <span style=\"color:var(--muted)\">｜關卡 ${levelIdx+1}/6｜收集 ${goalCount}/${goalNeed}｜分數 ${score}｜生命 ${lives}</span>`;
+    const boxes = GROUPS.map(x => {
+      const st = stats[x.id];
+      return `<div class=\"summaryBox\"><b>${x.name}</b>正確吃到：${st.correct}｜吃錯：${st.wrong}</div>`;
+    }).join('');
+    return `<div>${head}</div><div class=\"summaryGrid\">${boxes}</div>`;
+  }
+
+  function buildSummaryHTML(){
+    const lines = GROUPS.map(g => {
+      const s = stats[g.id];
+      return `<div style="margin:6px 0;">
+        <span class="pill">${g.name}</span>
+        <span style="color:var(--muted)"> 正確吃到：${s.correct}｜吃錯：${s.wrong}</span>
+      </div>`;
+    }).join("");
+    return `<div style="margin-top:8px">${lines}</div>`;
+  }
+
+  function loop(ts){
+    if(!running){
+      draw();
+      requestAnimationFrame(loop);
+      return;
+    }
+    if(paused){
+      draw(true);
+      requestAnimationFrame(loop);
+      return;
+    }
+
+    if(!lastTick) lastTick = ts;
+    const dt = ts - lastTick;
+
+    if(dt >= stepMs){
+      lastTick = ts;
+      step();
+    }
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  // ====== DRAW ======
+  function draw(pausedOverlay=false){
+    // background
+    ctx.clearRect(0,0,canvas.width/dpr,canvas.height/dpr);
+
+    // grid subtle
+    ctx.save();
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = "rgba(255,255,255,.10)";
+    for(let x=0;x<=GRID_W;x++){
+      ctx.beginPath();
+      ctx.moveTo(offsetX + x*CELL, offsetY);
+      ctx.lineTo(offsetX + x*CELL, offsetY + GRID_H*CELL);
+      ctx.stroke();
+    }
+    for(let y=0;y<=GRID_H;y++){
+      ctx.beginPath();
+      ctx.moveTo(offsetX, offsetY + y*CELL);
+      ctx.lineTo(offsetX + GRID_W*CELL, offsetY + y*CELL);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // foods
+    for(const f of foods){
+      drawFood(f);
+    }
+
+    // snake
+    drawSnake();
+
+    // paused banner
+    if(pausedOverlay){
+      ctx.save();
+      ctx.fillStyle = "rgba(0,0,0,.35)";
+      ctx.fillRect(0,0,canvas.width/dpr,canvas.height/dpr);
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      ctx.font = "900 24px ui-sans-serif, system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText("暫停中", (canvas.width/dpr)/2, (canvas.height/dpr)/2 - 12);
+      ctx.font = "600 14px ui-sans-serif, system-ui";
+      ctx.fillStyle = "rgba(255,255,255,.75)";
+      ctx.fillText("按 Enter 或按「開始/暫停」繼續", (canvas.width/dpr)/2, (canvas.height/dpr)/2 + 14);
+      ctx.restore();
+    }
+  }
+
+  function drawSnake(){
+    for(let i=snake.length-1;i>=0;i--){
+      const s = snake[i];
+      const x = offsetX + s.x*CELL;
+      const y = offsetY + s.y*CELL;
+
+      const isHead = (i === 0);
+      ctx.save();
+      ctx.fillStyle = isHead ? "rgba(255,255,255,.92)" : "rgba(255,255,255,.55)";
+      if(isHead){
+        ctx.fillStyle = "rgba(255,255,255,.92)";
+      }else{
+        // gradient-ish by index
+        const a = Math.max(0.25, 0.60 - i*0.012);
+        ctx.fillStyle = `rgba(255,255,255,${a})`;
+      }
+      roundRect(ctx, x+3, y+3, CELL-6, CELL-6, 10);
+      ctx.fill();
+
+      // head face
+      if(isHead){
+        ctx.fillStyle = "rgba(0,0,0,.55)";
+        ctx.beginPath();
+        ctx.arc(x + CELL*0.38, y + CELL*0.43, 2.2, 0, Math.PI*2);
+        ctx.arc(x + CELL*0.62, y + CELL*0.43, 2.2, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  function drawFood(f){
+    const x = offsetX + f.x*CELL;
+    const y = offsetY + f.y*CELL;
+
+    const it = f.item;
+    const isGoal = it.group === goalGroup;
+    const g = GROUPS.find(g => g.id === it.group);
+    const col = it.group === "not" ? "#ef4444" : (g ? g.color : "#93c5fd");
+
+    ctx.save();
+    // glow
+    ctx.globalAlpha = isGoal ? 0.35 : 0.22;
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.arc(x + CELL/2, y + CELL/2, CELL*0.48, 0, Math.PI*2);
+    ctx.fill();
+
+    // core
+    ctx.globalAlpha = 0.95;
+    ctx.fillStyle = "rgba(0,0,0,.35)";
+    ctx.beginPath();
+    ctx.arc(x + CELL/2, y + CELL/2, CELL*0.40, 0, Math.PI*2);
+    ctx.fill();
+
+    // label
+    ctx.globalAlpha = 0.95;
+    ctx.fillStyle = "rgba(255,255,255,.92)";
+    ctx.font = `900 ${Math.max(10, Math.floor(CELL*0.32))}px ui-sans-serif, system-ui`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(it.short, x + CELL/2, y + CELL/2);
+
+    // outline
+    ctx.globalAlpha = 0.85;
+    ctx.strokeStyle = isGoal ? "rgba(255,255,255,.40)" : "rgba(255,255,255,.18)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x + CELL/2, y + CELL/2, CELL*0.42, 0, Math.PI*2);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function roundRect(ctx, x, y, w, h, r){
+    const rr = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr, y);
+    ctx.arcTo(x+w, y, x+w, y+h, rr);
+    ctx.arcTo(x+w, y+h, x, y+h, rr);
+    ctx.arcTo(x, y+h, x, y, rr);
+    ctx.arcTo(x, y, x+w, y, rr);
+    ctx.closePath();
+  }
+  // ====== INPUTS ======
+
+  function toggleStart(){
+    if(!running){
+      running = true;
+      paused = false;
+      startOverlay.classList.remove('show');
+      lastTick = 0;
+      return;
+    }
+    paused = !paused;
+  }
+
+  document.addEventListener('keydown', (e) => {
+
+    const key = e.key;
+    if(key === 'Enter'){
+      e.preventDefault();
+      toggleStart();
+      return;
+    }
+    if(!running || paused) {
+      // allow direction queue even when paused? keep simple
+    }
+    if(key === 'ArrowUp' || key === 'w' || key === 'W') setDir(0,-1);
+    if(key === 'ArrowDown' || key === 's' || key === 'S') setDir(0, 1);
+    if(key === 'ArrowLeft' || key === 'a' || key === 'A') setDir(-1,0);
+    if(key === 'ArrowRight' || key === 'd' || key === 'D') setDir( 1,0);
+  });
+
+  // touch buttons
+  const tUp = document.getElementById('tUp');
+  const tDown = document.getElementById('tDown');
+  const tLeft = document.getElementById('tLeft');
+  const tRight = document.getElementById('tRight');
+  tUp?.addEventListener('click', () => setDir(0,-1));
+  tDown?.addEventListener('click', () => setDir(0, 1));
+  tLeft?.addEventListener('click', () => setDir(-1,0));
+  tRight?.addEventListener('click', () => setDir( 1,0));
+
+  // touchstart for more responsive tablet controls
+  const bindTouch = (el, fn) => {
+    if(!el) return;
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); fn(); }, {passive:false});
+  };
+  bindTouch(tUp, () => setDir(0,-1));
+  bindTouch(tDown, () => setDir(0, 1));
+  bindTouch(tLeft, () => setDir(-1,0));
+  bindTouch(tRight, () => setDir( 1,0));
+
+  // buttons
+  document.getElementById('startBtn').addEventListener('click', toggleStart);
+  document.getElementById('restartBtn').addEventListener('click', () => { resetGame(); startOverlay.classList.add('show'); });
+  document.getElementById('playAgain').addEventListener('click', () => { resetGame(); startOverlay.classList.add('show'); });
+
+  document.getElementById('overlayStart').addEventListener('click', () => toggleStart());
+  document.getElementById('overlayClose').addEventListener('click', () => startOverlay.classList.remove('show'));
+
+  // responsive
+  window.addEventListener('resize', () => { resize(); });
+
+  // init
+  resize();
+  resetGame();
+  updateHUD();
+  requestAnimationFrame(loop);
+
+  // set initial goal labels
+  ui.goalName.textContent = GROUPS[levelIdx].name;
+  ui.goalNeed.textContent = String(goalNeed);
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>脊索動物門｜無脊椎動物分類偵探隊</title>
+  <style>
+    :root{
+      --bg:#f7fbff; --ink:#214052; --muted:#5d7280; --blue:#23a8d9; --blue2:#dff4fb;
+      --peach:#ffd8c2; --peach2:#fff0e6; --green:#7cc7a2; --green2:#e9f8f1;
+      --yellow:#ffe38a; --yellow2:#fff8d8; --shadow:0 12px 30px rgba(31,87,113,.12);
+      --line:#c8dbe5; --red:#ff7979;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--ink);background:linear-gradient(#f8fdff,#eef8fb 55%,#e8f3f7)}
+    body:before{content:"";position:fixed;left:0;right:0;bottom:0;height:170px;background:
+      radial-gradient(ellipse at 8% 100%,rgba(126,166,184,.28) 0 34%,transparent 35%),
+      radial-gradient(ellipse at 92% 100%,rgba(126,166,184,.24) 0 30%,transparent 31%);pointer-events:none;z-index:-1}
+    .wrap{width:min(1040px,92vw);margin:auto;padding:28px 0 56px}.topnav{display:flex;justify-content:space-between;gap:12px;margin-bottom:18px}.navbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:2px solid #cfe7ef;border-radius:999px;background:white;color:#33708a;text-decoration:none;font-weight:800;box-shadow:var(--shadow)}
+    header{background:linear-gradient(135deg,#ffffff 0%,#eefbff 62%,#fff7e6 100%);border:2px solid #d7edf4;border-radius:28px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--yellow2);border:2px solid var(--yellow);border-radius:999px;padding:7px 12px;font-weight:900;color:#765d00}.eyebrow:before{content:"⭐"}h1{font-size:clamp(2rem,5vw,3.5rem);margin:10px 0 8px;color:#16485f;letter-spacing:.03em}.lead{font-size:1.15rem;line-height:1.9;max-width:760px;color:#425f70}.accent{color:#0787b7;font-weight:900}.hero-animals{position:absolute;right:22px;bottom:12px;font-size:4.5rem;opacity:.9;letter-spacing:-.25em}.section-title{display:flex;align-items:center;gap:12px;margin:28px 0 14px}.badge{width:54px;height:54px;border-radius:16px;background:var(--blue);display:grid;place-items:center;color:white;font-size:1.75rem;font-weight:900;box-shadow:var(--shadow)}h2{font-size:1.75rem;margin:0}.card{background:white;border:2px solid #d7edf4;border-radius:24px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px}.learn-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}.key-list{display:grid;gap:12px}.key{display:flex;gap:12px;align-items:flex-start;background:#fbfeff;border:2px solid #e0f0f5;border-radius:18px;padding:14px}.key b{color:#0787b7}.dot{width:28px;height:28px;flex:0 0 28px;border-radius:50%;display:grid;place-items:center;background:var(--blue2);color:#0787b7;font-weight:900}.tree{padding:18px;border-radius:22px;background:linear-gradient(#fff,#f4fbfe);border:2px solid #e0f0f5;text-align:center}.tree .root{display:inline-block;background:#ffe88c;border-radius:50%;padding:12px 26px;font-weight:900}.branch{height:22px;border-left:3px solid var(--line);margin:auto;width:1px}.groups{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.group{min-height:86px;border:3px solid #f7cdb8;background:var(--peach2);border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:8px;font-weight:900}.group small{font-size:.78rem;color:#6f7780;font-weight:800}.group.active{background:var(--peach);box-shadow:0 8px 18px rgba(238,145,93,.18)}.animal-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}.animal{background:#fff;border:2px solid #e1edf2;border-radius:20px;overflow:hidden}.animal .pic{height:100px;display:grid;place-items:center;font-size:3.8rem;background:linear-gradient(135deg,#dff4fb,#fff7e7)}.animal .txt{padding:12px;font-size:.95rem;line-height:1.55}.animal b{display:block;color:#16485f;font-size:1.05rem}.observe{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}.diagram{min-height:310px;border-radius:24px;background:linear-gradient(180deg,#e8f8ff,#fff);border:2px solid #d7edf4;position:relative;display:grid;place-items:center;overflow:hidden}.diagram .big{font-size:8rem;filter:drop-shadow(0 8px 12px rgba(30,80,100,.18))}.hot{position:absolute;width:42px;height:42px;border:0;border-radius:50%;background:#20b65b;color:white;font-weight:900;font-size:1.3rem;box-shadow:0 0 0 6px rgba(32,182,91,.18),var(--shadow);cursor:pointer}.hot.done{background:#0b88bb}.hot:nth-of-type(1){left:23%;top:28%}.hot:nth-of-type(2){left:54%;top:23%}.hot:nth-of-type(3){left:69%;top:56%}.hot:nth-of-type(4){left:38%;top:68%}.hot:nth-of-type(5){left:76%;top:25%}.info{background:var(--green2);border:2px solid #c9ebda;border-radius:20px;padding:18px;min-height:180px}.info h3{margin:0 0 10px;color:#187a51}.progress{font-weight:900;color:#0b88bb;margin-top:10px}.hint{background:#f7fbfe;border-left:8px solid var(--blue);border-radius:16px;padding:14px;line-height:1.7}.quiz{display:grid;gap:16px}.q{background:white;border:2px solid #d7edf4;border-radius:24px;padding:20px;box-shadow:var(--shadow)}.q h3{margin:.1rem 0 12px;font-size:1.16rem}.type{display:inline-block;background:#f1fbff;border:2px solid #cfeaf3;color:#0a7fa9;border-radius:999px;padding:4px 10px;font-weight:900;font-size:.85rem;margin-bottom:8px}.options{display:grid;gap:10px}.opt{border:2px solid #dcebf1;background:#fbfeff;border-radius:16px;padding:12px 14px;cursor:pointer;font-weight:800;line-height:1.55}.opt:hover{border-color:#7ccde6}.opt.selected{background:#e6f7ff;border-color:#23a8d9}.opt.correct{background:#e9f8f1;border-color:#54bd86}.opt.wrong{background:#fff0f0;border-color:#ff9f9f}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.btn{border:0;border-radius:999px;padding:10px 16px;font-weight:900;cursor:pointer;background:#24a9d8;color:white;box-shadow:var(--shadow)}.btn.secondary{background:#eaf6fa;color:#22708d}.feedback{margin-top:10px;font-weight:900}.pairs{display:grid;gap:12px}.pair{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:center}.pair label{font-weight:900}.pair select{width:100%;padding:12px;border:2px solid #dcebf1;border-radius:14px;background:white;font-weight:800;color:var(--ink)}.order-box{display:flex;gap:10px;flex-wrap:wrap}.pill{border:2px solid #dcebf1;background:#fbfeff;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer}.pill.chosen{background:#e6f7ff;border-color:#23a8d9}.footer-note{text-align:center;font-weight:900;color:#4b788d;margin:22px 0}.locked{opacity:.65}.bottomnav{display:flex;justify-content:space-between;margin-top:22px}@media (max-width:850px){.hero-animals{position:static;font-size:3rem;margin-top:10px}.learn-grid,.observe{grid-template-columns:1fr}.groups,.animal-cards{grid-template-columns:repeat(2,1fr)}.pair{grid-template-columns:1fr}.hot:nth-of-type(1){left:15%}.hot:nth-of-type(2){left:48%}.hot:nth-of-type(3){left:70%}.hot:nth-of-type(4){left:30%}.hot:nth-of-type(5){left:78%;top:20%}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topnav"><a class="navbtn" href="echinoderm.html">← 上一頁</a><a class="navbtn" href="index.html">回首頁</a></nav>
+    <header>
+      <span class="eyebrow">有脊椎骨的動物大集合</span>
+      <h1>脊索動物門</h1>
+      <p class="lead">脊椎動物在分類上屬於 <span class="accent">脊索動物門</span>。這一頁要用「呼吸方式、體表構造、繁殖與育幼」當線索，分辨魚類、兩生類、爬蟲類、鳥類和哺乳類。</p>
+      <div class="hero-animals" aria-hidden="true">🐟🐸🦎🦅🐋</div>
+    </header>
+
+    <section>
+      <div class="section-title"><div class="badge">學</div><h2>學習內容</h2></div>
+      <div class="learn-grid">
+        <div class="card key-list">
+          <div class="key"><div class="dot">1</div><div><b>共同線索：</b>魚類、兩生類、爬蟲類、鳥類和哺乳類都屬於脊椎動物，也就是具有脊椎骨的動物。</div></div>
+          <div class="key"><div class="dot">2</div><div><b>魚類：</b>生活在水中，以鰓呼吸，多數具有鱗片；可分為軟骨魚與硬骨魚。</div></div>
+          <div class="key"><div class="dot">3</div><div><b>兩生類：</b>幼體多生活在水中，以鰓呼吸；成體以肺呼吸，常生活在潮溼或靠近水的地方。</div></div>
+          <div class="key"><div class="dot">4</div><div><b>爬蟲類：</b>以肺呼吸，體表有鱗片或骨板，多數卵有外殼，能適應較乾燥的陸地環境。</div></div>
+          <div class="key"><div class="dot">5</div><div><b>鳥類與哺乳類：</b>鳥類有喙、翅膀與羽毛；哺乳類用肺呼吸，母體能分泌乳汁哺育幼體。</div></div>
+        </div>
+        <div class="card tree" aria-label="脊椎動物分類圖">
+          <div class="root">動物界</div><div class="branch"></div>
+          <div style="display:inline-block;background:#ffd8c2;border-radius:10px;padding:10px 20px;font-weight:900">脊椎動物</div>
+          <div class="branch"></div>
+          <div class="groups">
+            <div class="group active">魚類<small>以鰓呼吸</small></div>
+            <div class="group active">兩生類<small>幼鰓成肺</small></div>
+            <div class="group active">爬蟲類<small>鱗片／骨板</small></div>
+            <div class="group active">鳥類<small>羽毛</small></div>
+            <div class="group active">哺乳類<small>乳汁育幼</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="card animal-cards">
+        <div class="animal"><div class="pic">🐟</div><div class="txt"><b>魚類</b>鰓、鱗片、鰓蓋或鰓裂是常見觀察重點。</div></div>
+        <div class="animal"><div class="pic">🐸</div><div class="txt"><b>兩生類</b>一生中常經歷水中幼體與陸上成體階段。</div></div>
+        <div class="animal"><div class="pic">🐢</div><div class="txt"><b>爬蟲類</b>乾燥鱗片或骨板可幫助減少水分散失。</div></div>
+        <div class="animal"><div class="pic">🦅</div><div class="txt"><b>鳥類</b>羽毛、翅膀、喙、中空骨骼與氣囊利於飛行。</div></div>
+        <div class="animal"><div class="pic">🦇</div><div class="txt"><b>哺乳類</b>乳汁育幼、體表多有毛髮；蝙蝠是會飛的哺乳類。</div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title"><div class="badge">探</div><h2>脊椎動物五大類觀察任務</h2></div>
+      <div class="card observe">
+        <div>
+          <p class="hint">點擊綠色驚嘆號，探索五大類的分類線索。完成後再進入練習。</p>
+          <div class="diagram">
+            <div class="big" id="bigAnimal">🐟🐸🦎🦅🐋</div>
+            <button class="hot" data-hot="fish" aria-label="魚類">!</button>
+            <button class="hot" data-hot="amphibian" aria-label="兩生類">!</button>
+            <button class="hot" data-hot="reptile" aria-label="爬蟲類">!</button>
+            <button class="hot" data-hot="bird" aria-label="鳥類">!</button>
+            <button class="hot" data-hot="mammal" aria-label="哺乳類">!</button>
+          </div>
+        </div>
+        <div class="info" id="hotInfo"><h3>請點 ①②③④⑤ 查看說明</h3><p>觀察重點：同樣有脊椎骨，但不同類群有不同體表、呼吸與生殖育幼特徵。</p><div class="progress" id="hotProgress">已探索：0 / 5 個線索</div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title"><div class="badge">練</div><h2>互動練習</h2></div>
+      <div class="quiz" id="quiz">
+        <div class="q" data-type="single" data-answer="脊椎動物在分類上屬於脊索動物門，包含魚類、兩生類、爬蟲類、鳥類和哺乳類。">
+          <span class="type">選擇題</span><h3>1. 哪一項最符合本頁的主要概念？</h3>
+          <div class="options"><div class="opt">脊椎動物在分類上屬於脊索動物門，包含魚類、兩生類、爬蟲類、鳥類和哺乳類。</div><div class="opt">所有脊索動物都沒有脊椎骨。</div><div class="opt">只有哺乳類才屬於脊索動物門。</div><div class="opt">魚類、鳥類和哺乳類都屬於無脊椎動物。</div></div><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+        <div class="q" data-type="multi" data-answer="鯊魚|吳郭魚|蛙|龜|小白鷺|蝙蝠">
+          <span class="type">翻牌多選</span><h3>2. 選出所有屬於脊椎動物的代表。</h3>
+          <div class="options"><div class="opt">鯊魚</div><div class="opt">吳郭魚</div><div class="opt">蛙</div><div class="opt">龜</div><div class="opt">小白鷺</div><div class="opt">蝙蝠</div><div class="opt">水母</div><div class="opt">蝸牛</div><div class="opt">蚯蚓</div><div class="opt">海星</div></div><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+        <div class="q" data-type="single" data-answer="幼體以鰓呼吸，成體以肺呼吸。">
+          <span class="type">選擇題</span><h3>3. 哪一項是兩生類的重要分類線索？</h3>
+          <div class="options"><div class="opt">幼體以鰓呼吸，成體以肺呼吸。</div><div class="opt">身體表面有羽毛。</div><div class="opt">母體分泌乳汁哺育幼體。</div><div class="opt">大部分骨質為軟骨，具有數條鰓裂。</div></div><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+        <div class="q" data-type="multi" data-answer="以肺呼吸|體表有鱗片或骨板|卵多有外殼保護|較能適應乾燥陸地環境">
+          <span class="type">多選任務</span><h3>4. 點選所有屬於爬蟲類的特徵。</h3>
+          <div class="options"><div class="opt">以肺呼吸</div><div class="opt">體表有鱗片或骨板</div><div class="opt">卵多有外殼保護</div><div class="opt">較能適應乾燥陸地環境</div><div class="opt">身體柔軟且有外套膜</div><div class="opt">觸手有刺絲胞</div></div><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+        <div class="q" data-type="pairs" data-answer='{"魚類":"以鰓呼吸，多數具鱗片","鳥類":"體表有羽毛，前肢為翅膀","哺乳類":"母體分泌乳汁哺育幼體"}'>
+          <span class="type">下拉式配對</span><h3>5. 將動物類群配對到正確特徵。</h3>
+          <div class="pairs"><div class="pair"><label>魚類</label><select><option>請選擇</option><option>以鰓呼吸，多數具鱗片</option><option>體表有羽毛，前肢為翅膀</option><option>母體分泌乳汁哺育幼體</option></select></div><div class="pair"><label>鳥類</label><select><option>請選擇</option><option>以鰓呼吸，多數具鱗片</option><option>體表有羽毛，前肢為翅膀</option><option>母體分泌乳汁哺育幼體</option></select></div><div class="pair"><label>哺乳類</label><select><option>請選擇</option><option>以鰓呼吸，多數具鱗片</option><option>體表有羽毛，前肢為翅膀</option><option>母體分泌乳汁哺育幼體</option></select></div></div><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+        <div class="q" data-type="single" data-answer="硬骨魚鰓的外側有鰓蓋保護，軟骨魚常具有數條鰓裂。">
+          <span class="type">比較判斷</span><h3>6. 關於軟骨魚與硬骨魚，下列何者正確？</h3>
+          <div class="options"><div class="opt">硬骨魚鰓的外側有鰓蓋保護，軟骨魚常具有數條鰓裂。</div><div class="opt">軟骨魚都有羽毛，硬骨魚都會分泌乳汁。</div><div class="opt">硬骨魚都沒有鰓，必須用肺呼吸。</div><div class="opt">軟骨魚與硬骨魚都不屬於脊椎動物。</div></div><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+        <div class="q" data-type="order" data-answer="魚類|兩生類|爬蟲類|鳥類|哺乳類">
+          <span class="type">分類排序</span><h3>7. 依照課本分類圖由左到右，點選五大類。</h3>
+          <div class="order-box"><button class="pill">鳥類</button><button class="pill">魚類</button><button class="pill">哺乳類</button><button class="pill">爬蟲類</button><button class="pill">兩生類</button></div><p class="hint" data-picked>已選：尚未選擇</p><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+        <div class="q" data-type="single" data-answer="錯。蝙蝠會飛，但牠用肺呼吸，且母體會分泌乳汁哺育幼體，所以是哺乳類。">
+          <span class="type">情境判斷</span><h3>8. 同學說：「蝙蝠會飛，所以一定是鳥類。」哪個回應最好？</h3>
+          <div class="options"><div class="opt">對，凡是會飛的動物都是鳥類。</div><div class="opt">錯。蝙蝠會飛，但牠用肺呼吸，且母體會分泌乳汁哺育幼體，所以是哺乳類。</div><div class="opt">對，因為蝙蝠有羽毛。</div><div class="opt">錯。蝙蝠是魚類，因為牠有鰓蓋。</div></div><div class="actions"><button class="btn check">檢查答案</button><button class="btn secondary reset">重做本題</button></div><div class="feedback"></div>
+        </div>
+      </div>
+      <p class="footer-note" id="finalNote">完成並答對本頁所有題目後，才能前往下一頁。</p>
+    </section>
+    <nav class="bottomnav"><a class="navbtn" href="echinoderm.html">← 上一頁</a><a class="navbtn locked" id="nextBtn" href="index.html" aria-disabled="true">下一頁 →</a></nav>
+  </main>
+  <script>
+    const hotText={fish:['魚類','生活在水中，以鰓呼吸，多數具有鱗片。軟骨魚如鯊魚、魟魚；硬骨魚如小丑魚、海馬、吳郭魚。','🐟'],amphibian:['兩生類','幼體通常生活在水中，以鰓呼吸；長成成體後以肺呼吸，常見代表有蛙、蟾蜍、山椒魚。','🐸'],reptile:['爬蟲類','以肺呼吸，體表有鱗片或骨板；多數卵具有外殼保護，能減少水分散失。','🐢'],bird:['鳥類','有角質化的喙、翅膀與羽毛。中空骨骼、肺與氣囊等構造有利於飛行。','🦅'],mammal:['哺乳類','用肺呼吸，母體能分泌乳汁哺育幼體；體表大多具有毛髮，例如象、蝙蝠、虎鯨。','🐋']};
+    const explored=new Set();
+    document.querySelectorAll('.hot').forEach(btn=>btn.addEventListener('click',()=>{const k=btn.dataset.hot; explored.add(k); btn.classList.add('done'); const [h,p,emoji]=hotText[k]; document.getElementById('hotInfo').innerHTML=`<h3>${emoji} ${h}</h3><p>${p}</p><div class="progress" id="hotProgress">已探索：${explored.size} / 5 個線索</div>`;}));
+    const answered=new Set();
+    function selectedTexts(q){return [...q.querySelectorAll('.opt.selected')].map(o=>o.textContent.trim());}
+    function mark(q, ok){q.querySelector('.feedback').textContent=ok?'答對了！你抓到分類線索。':'再觀察一次關鍵特徵。';q.querySelector('.feedback').style.color=ok?'#168553':'#c94b4b'; if(ok) answered.add([...document.querySelectorAll('.q')].indexOf(q)); updateDone();}
+    document.querySelectorAll('.q').forEach(q=>{q.querySelectorAll('.opt').forEach(opt=>opt.addEventListener('click',()=>{if(q.dataset.type==='single'){q.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));} opt.classList.toggle('selected');})); q.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{p.classList.toggle('chosen'); const arr=[...q.querySelectorAll('.pill.chosen')].map(x=>x.textContent.trim()); q.querySelector('[data-picked]').textContent='已選：'+(arr.join(' → ')||'尚未選擇');})); q.querySelector('.check').addEventListener('click',()=>check(q)); q.querySelector('.reset').addEventListener('click',()=>resetQ(q));});
+    function check(q){const t=q.dataset.type; let ok=false; q.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));
+      if(t==='single'){const ans=q.dataset.answer; const sel=selectedTexts(q); ok=sel.length===1&&sel[0]===ans; q.querySelectorAll('.opt').forEach(o=>{if(o.textContent.trim()===ans)o.classList.add('correct'); else if(o.classList.contains('selected'))o.classList.add('wrong');});}
+      if(t==='multi'){const ans=q.dataset.answer.split('|').sort(); const sel=selectedTexts(q).sort(); ok=ans.join('|')===sel.join('|'); q.querySelectorAll('.opt').forEach(o=>{const v=o.textContent.trim(); if(ans.includes(v))o.classList.add('correct'); else if(o.classList.contains('selected'))o.classList.add('wrong');});}
+      if(t==='pairs'){const ans=JSON.parse(q.dataset.answer); ok=[...q.querySelectorAll('.pair')].every(p=>p.querySelector('select').value===ans[p.querySelector('label').textContent.trim()]);}
+      if(t==='order'){const ans=q.dataset.answer.split('|').join('→'); const sel=[...q.querySelectorAll('.pill.chosen')].map(x=>x.textContent.trim()).join('→'); ok=sel===ans;}
+      mark(q,ok)}
+    function resetQ(q){q.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected','correct','wrong'));q.querySelectorAll('select').forEach(s=>s.selectedIndex=0);q.querySelectorAll('.pill').forEach(p=>p.classList.remove('chosen'));const picked=q.querySelector('[data-picked]'); if(picked)picked.textContent='已選：尚未選擇';q.querySelector('.feedback').textContent='';answered.delete([...document.querySelectorAll('.q')].indexOf(q));updateDone();}
+    function updateDone(){const total=document.querySelectorAll('.q').length; if(answered.size===total){document.getElementById('finalNote').textContent='恭喜完成！你已能用線索分辨脊索動物門五大類。';document.getElementById('nextBtn').classList.remove('locked');document.getElementById('nextBtn').removeAttribute('aria-disabled');}else{document.getElementById('finalNote').textContent=`完成並答對本頁所有題目後，才能前往下一頁。（已完成 ${answered.size} / ${total} 題）`;}}
+  </script>
+</body>
+</html>

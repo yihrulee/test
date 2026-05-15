@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>脊索動物門 - 數位互動課程</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fefce8;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 關鍵字樣式 */
+        .keyword-blue { color: #2563eb; font-weight: 700; }
+        .keyword-red { color: #dc2626; font-weight: 700; }
+        
+        /* 答題狀態樣式 */
+        .quiz-card { transition: all 0.3s ease; border: 2px solid #e2e8f0; }
+        .correct { border: 4px solid #10b981 !important; background-color: #ecfdf5 !important; }
+        .incorrect { border: 4px solid #ef4444 !important; background-color: #fef2f2 !important; }
+        
+        .feedback-box { display: none; margin-top: 1rem; padding: 1.25rem; border-radius: 1rem; border: 1px solid #cbd5e1; line-height: 1.6; }
+        
+        .btn-check { background-color: #3b82f6; color: white; transition: all 0.2s; }
+        .btn-check:disabled { background-color: #cbd5e1; cursor: not-allowed; opacity: 0.6; }
+
+        /* 媒體容器 */
+        .media-container { width: 100%; border-radius: 1.5rem; background: #fff; overflow: hidden; border: 4px solid #e2e8f0; }
+        .media-container img { width: 100%; height: auto; max-height: 350px; object-fit: contain; display: block; margin: 0 auto; }
+
+        /* 特徵切換器樣式 */
+        .trait-tab { cursor: pointer; transition: all 0.3s; }
+        .trait-tab:hover { background-color: #dbeafe; }
+        .active-tab { background-color: #2563eb !important; color: white !important; transform: scale(1.05); }
+
+        /* 解決底部遮擋 */
+        .content-wrapper { padding-bottom: 250px; }
+    </style>
+</head>
+<body>
+
+    <div class="content-wrapper max-w-4xl mx-auto px-4 py-8">
+        
+        <!-- 1. 學習內容文本 -->
+        <section class="bg-white rounded-3xl shadow-sm p-6 md:p-10 mb-10 border border-blue-100">
+            <h2 class="text-3xl font-black text-blue-900 mb-6 flex items-center gap-3">
+                <span class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-xl">9</span>
+                脊索動物門 (Chordata)
+            </h2>
+            <div class="space-y-6 text-xl leading-relaxed text-slate-700 text-justify">
+                <p>
+                    脊索動物門中最主要的群體是<span class="keyword-blue">脊椎動物</span>，牠們具有由脊椎骨組成的<span class="keyword-blue">脊柱</span>，支撐身體並保護中樞神經。
+                </p>
+                <p>
+                    根據呼吸器官、受精方式、卵的構造及體溫調節，科學家將牠們分為五大類：<span class="font-bold">魚類、兩生類、爬蟲類、鳥類及哺乳類</span>。
+                </p>
+                <div class="bg-blue-50 p-5 rounded-2xl border-l-8 border-blue-500 text-lg">
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li><span class="keyword-red">外溫動物：</span> 魚類、兩生類、爬蟲類（體溫隨環境改變）。</li>
+                        <li><span class="keyword-red">內溫動物：</span> 鳥類、哺乳類（具備恆定體溫機制）。</li>
+                        <li><span class="keyword-red">羊膜動物：</span> 爬蟲、鳥、哺乳類（卵具羊膜防止水分散失）。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 互動任務：五大類群特徵切換 -->
+        <section class="bg-blue-900 rounded-3xl p-6 md:p-10 mb-10 text-white">
+            <h2 class="text-2xl font-black mb-4 flex items-center gap-2">🧬 互動探索：脊椎動物五大類群</h2>
+            <p class="mb-8 text-blue-200">點擊標籤查看各綱的演化特徵與代表生物：</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-8">
+                <div onclick="showTrait('fish', this)" class="trait-tab active-tab p-3 rounded-xl text-center bg-white/10 border border-white/20 font-bold">魚類</div>
+                <div onclick="showTrait('amphi', this)" class="trait-tab p-3 rounded-xl text-center bg-white/10 border border-white/20 font-bold">兩生類</div>
+                <div onclick="showTrait('repti', this)" class="trait-tab p-3 rounded-xl text-center bg-white/10 border border-white/20 font-bold">爬蟲類</div>
+                <div onclick="showTrait('birds', this)" class="trait-tab p-3 rounded-xl text-center bg-white/10 border border-white/20 font-bold">鳥類</div>
+                <div onclick="showTrait('mamml', this)" class="trait-tab p-3 rounded-xl text-center bg-white/10 border border-white/20 font-bold">哺乳類</div>
+            </div>
+
+            <div id="trait-content" class="bg-white rounded-2xl p-6 text-slate-800 flex flex-col md:flex-row gap-6 items-center">
+                <div class="flex-1">
+                    <img id="trait-img" src="fish_types.png" class="rounded-xl w-full h-48 object-contain bg-slate-100" onerror="this.parentElement.innerHTML='[類群圖示]'">
+                </div>
+                <div class="flex-[1.5]">
+                    <h3 id="trait-title" class="text-2xl font-black text-blue-700 mb-3">魚類</h3>
+                    <p id="trait-desc" class="text-lg leading-relaxed">
+                        多數具<span class="keyword-blue">鱗片</span>，利用<span class="keyword-blue">鰓</span>呼吸，行<span class="keyword-red">體外受精</span>。分為軟骨魚（魟、鯊）與硬骨魚（小丑魚、海馬）。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 知識練習題 (題目較多) -->
+        <div class="space-y-8">
+            <h2 class="text-3xl font-black text-slate-900 mb-6 px-2">📝 脊索動物深度測驗</h2>
+
+            <!-- Q1: 單選題 (魚類分類) -->
+            <div id="q1" class="quiz-card bg-white p-6 md:p-8 rounded-3xl shadow-sm">
+                <p class="text-xl font-black mb-6">1. 關於「魟魚」與「鯊魚」的敘述，下列何者正確？</p>
+                <div id="q1-options" class="grid gap-3"></div>
+                <div class="flex gap-3 mt-6">
+                    <button onclick="checkMCQ('q1', '骨骼質地多為軟骨，且具有鰓裂')" id="q1-btn" class="btn-check px-8 py-3 rounded-xl font-bold" disabled>檢查答案</button>
+                    <button onclick="resetQuestion('q1')" id="q1-reset" class="hidden px-6 py-3 bg-slate-200 text-slate-600 rounded-xl font-bold">重做本題</button>
+                </div>
+                <div class="feedback-box bg-slate-50" id="q1-feedback">
+                    <p class="font-bold text-lg mb-1">回饋解說：</p>
+                    <p>魟魚與鯊魚屬於<span class="keyword-blue">軟骨魚</span>。特徵是具有數條鰓裂，且沒有鰓蓋保護。</p>
+                </div>
+            </div>
+
+            <!-- Q2: 是非題 (兩生類) -->
+            <div id="q2" class="quiz-card bg-white p-6 md:p-8 rounded-3xl shadow-sm">
+                <p class="text-xl font-black mb-6">2. 所有的兩生類（如山椒魚）成體皆使用「鰓」在水中呼吸。</p>
+                <div id="q2-options" class="flex gap-4"></div>
+                <div class="flex gap-3 mt-6">
+                    <button onclick="checkTF('q2', false)" id="q2-btn" class="btn-check px-8 py-3 rounded-xl font-bold" disabled>檢查答案</button>
+                    <button onclick="resetQuestion('q2')" id="q2-reset" class="hidden px-6 py-3 bg-slate-200 text-slate-600 rounded-xl font-bold">重做本題</button>
+                </div>
+                <div class="feedback-box bg-slate-50" id="q2-feedback">
+                    <p class="font-bold text-lg mb-1">回饋解說：</p>
+                    <p>錯誤。兩生類通常<span class="keyword-blue">幼體</span>用鰓呼吸，<span class="keyword-blue">成體</span>則改用<span class="keyword-blue">肺</span>呼吸，且皮膚濕潤輔助呼吸。</p>
+                </div>
+            </div>
+
+            <!-- Q3: 下拉配對 (恆溫特性) -->
+            <div id="q3" class="quiz-card bg-white p-6 md:p-8 rounded-3xl shadow-sm">
+                <p class="text-xl font-black mb-6">3. 請根據「體溫調節方式」將生物進行正確配對：</p>
+                <div class="space-y-6">
+                    <div class="flex flex-wrap items-center gap-3 text-lg">
+                        <span class="font-bold">「企鵝、鯨魚」屬於：</span>
+                        <select class="quiz-select border-2 border-slate-300 p-2 rounded-xl outline-none" onchange="checkInputs('q3')">
+                            <option value="">請選擇...</option>
+                            <option value="A">內溫動物（恆溫）</option>
+                            <option value="B">外溫動物（變溫）</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-lg">
+                        <span class="font-bold">「蜥蜴、吳郭魚」屬於：</span>
+                        <select class="quiz-select border-2 border-slate-300 p-2 rounded-xl outline-none" onchange="checkInputs('q3')">
+                            <option value="">請選擇...</option>
+                            <option value="A">內溫動物（恆溫）</option>
+                            <option value="B">外溫動物（變溫）</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-8">
+                    <button onclick="checkSelect('q3', ['A', 'B'])" id="q3-btn" class="btn-check px-8 py-3 rounded-xl font-bold" disabled>檢查答案</button>
+                    <button onclick="resetQuestion('q3')" id="q3-reset" class="hidden px-6 py-3 bg-slate-200 text-slate-600 rounded-xl font-bold">重做本題</button>
+                </div>
+                <div class="feedback-box bg-slate-50" id="q3-feedback">
+                    <p class="font-bold text-lg mb-1">回饋解說：</p>
+                    <p>鳥類（企鵝）與哺乳類（鯨魚）是<span class="keyword-red">內溫動物</span>；爬蟲（蜥蜴）與魚類是<span class="keyword-red">外溫動物</span>。</p>
+                </div>
+            </div>
+
+            <!-- Q4: 是非題 (哺乳類) -->
+            <div id="q4" class="quiz-card bg-white p-6 md:p-8 rounded-3xl shadow-sm">
+                <p class="text-xl font-black mb-6">4. 鴨嘴獸雖然是「卵生」，但因為母體能分泌乳汁，所以歸類於哺乳類。</p>
+                <div id="q4-options" class="flex gap-4"></div>
+                <div class="flex gap-3 mt-6">
+                    <button onclick="checkTF('q4', true)" id="q4-btn" class="btn-check px-8 py-3 rounded-xl font-bold" disabled>檢查答案</button>
+                    <button onclick="resetQuestion('q4')" id="q4-reset" class="hidden px-6 py-3 bg-slate-200 text-slate-600 rounded-xl font-bold">重做本題</button>
+                </div>
+                <div class="feedback-box bg-slate-50" id="q4-feedback">
+                    <p class="font-bold text-lg mb-1">回饋解說：</p>
+                    <p>正確！哺乳類的核心特徵是<span class="keyword-blue">母體分泌乳汁</span>哺育幼體。鴨嘴獸與針鼴是稀有的「卵生哺乳類」。</p>
+                </div>
+            </div>
+
+            <!-- Q5: 單選題 (鳥類飛行) -->
+            <div id="q5" class="quiz-card bg-white p-6 md:p-8 rounded-3xl shadow-sm">
+                <p class="text-xl font-black mb-6">5. 鳥類為了適應飛行，演化出許多減輕重量的特徵，但不包括下列何者？</p>
+                <div id="q5-options" class="grid gap-3"></div>
+                <div class="flex gap-3 mt-6">
+                    <button onclick="checkMCQ('q5', '體表具有角質層的鱗片')" id="q5-btn" class="btn-check px-8 py-3 rounded-xl font-bold" disabled>檢查答案</button>
+                    <button onclick="resetQuestion('q5')" id="q5-reset" class="hidden px-6 py-3 bg-slate-200 text-slate-600 rounded-xl font-bold">重做本題</button>
+                </div>
+                <div class="feedback-box bg-slate-50" id="q5-feedback">
+                    <p class="font-bold text-lg mb-1">回饋解說：</p>
+                    <p>鳥類特徵包括：骨骼中空、具氣囊、具瞬膜、前肢成翅。具有鱗片或骨板是<span class="keyword-blue">爬蟲類</span>的特徵。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 固定頁尾導覽 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-slate-200 p-5 flex justify-between items-center z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+        <button onclick="location.href='echinoderm.html'" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-black flex items-center gap-2">
+            ← 上一頁
+        </button>
+        <button id="nextBtn" onclick="location.href='review.html'" class="btn-next px-10 py-3 bg-blue-600 text-white rounded-2xl font-black flex items-center gap-2" disabled>
+            下一頁 →
+        </button>
+    </footer>
+
+    <script>
+        const state = { q1: false, q2: false, q3: false, q4: false, q5: false };
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // 初始化隨機選項
+        function initQuizzes() {
+            // Q1
+            const q1Container = document.getElementById('q1-options');
+            const q1Opts = shuffleArray([
+                '骨骼質地多為軟骨，且具有鰓裂',
+                '具有硬骨骨骼與鰓蓋保護',
+                '利用肺呼吸，體溫恆定',
+                '卵具羊膜，多為陸生'
+            ]);
+            q1Opts.forEach(o => q1Container.innerHTML += createRadio('q1', o));
+
+            // Q2
+            const q2Container = document.getElementById('q2-options');
+            const q2Opts = shuffleArray([{t:'正確 (○)',v:true}, {t:'錯誤 (×)',v:false}]);
+            q2Opts.forEach(o => q2Container.innerHTML += createRadio('q2', o.v, o.t));
+
+            // Q4
+            const q4Container = document.getElementById('q4-options');
+            const q4Opts = shuffleArray([{t:'正確 (○)',v:true}, {t:'錯誤 (×)',v:false}]);
+            q4Opts.forEach(o => q4Container.innerHTML += createRadio('q4', o.v, o.t));
+
+            // Q5
+            const q5Container = document.getElementById('q5-options');
+            const q5Opts = shuffleArray([
+                '體表具有角質層的鱗片',
+                '骨骼堅硬而輕且中空',
+                '肺延伸出許多氣囊協助呼吸',
+                '眼睛具有半透明的瞬膜'
+            ]);
+            q5Opts.forEach(o => q5Container.innerHTML += createRadio('q5', o));
+        }
+
+        function createRadio(name, val, labelText) {
+            return `
+                <label class="flex items-center gap-3 p-4 border-2 border-slate-100 rounded-2xl cursor-pointer hover:bg-blue-50 transition-all">
+                    <input type="radio" name="${name}" value="${val}" class="w-5 h-5" onchange="checkInputs('${name}')">
+                    <span class="text-lg font-medium">${labelText || val}</span>
+                </label>
+            `;
+        }
+
+        // 特徵切換
+        function showTrait(key, el) {
+            document.querySelectorAll('.trait-tab').forEach(t => t.classList.remove('active-tab'));
+            el.classList.add('active-tab');
+            const img = document.getElementById('trait-img');
+            const title = document.getElementById('trait-title');
+            const desc = document.getElementById('trait-desc');
+
+            const data = {
+                fish: { t: "魚類", d: "利用<span class='keyword-blue'>鰓</span>呼吸，分軟骨魚（無鰓蓋）與硬骨魚（具鰓蓋）。多數行<span class='keyword-red'>體外受精</span>。", i: "fish_types.png" },
+                amphi: { t: "兩生類", d: "幼體水生（鰓），成體陸生（肺與皮膚）。受精需在水中進行，為<span class='keyword-red'>外溫動物</span>。", i: "amphibian_cycle.png" },
+                repti: { t: "爬蟲類", d: "具角質鱗片或骨板。產下<span class='keyword-red'>羊膜卵</span>，成功適應陸地環境。如蛇、龜、鱷。", i: "amniotic_egg.png" },
+                birds: { t: "鳥類", d: "前肢為翅膀，體表具<span class='keyword-blue'>羽毛</span>。具氣囊與中空骨骼，屬<span class='keyword-red'>內溫動物</span>。", i: "bird_flying.png" },
+                mamml: { t: "哺乳類", d: "母體分泌乳汁哺育幼體。體表多具<span class='keyword-blue'>毛髮</span>。多數為胎生，少數卵生（鴨嘴獸）。", i: "mammal_traits.png" }
+            };
+            title.innerText = data[key].t;
+            desc.innerHTML = data[key].d;
+            img.src = data[key].i;
+        }
+
+        // 通用邏輯
+        function checkInputs(id) {
+            const btn = document.getElementById(`${id}-btn`);
+            if (id === 'q3') {
+                const selects = Array.from(document.querySelectorAll('#q3 select'));
+                btn.disabled = !selects.every(s => s.value !== "");
+            } else {
+                btn.disabled = !document.querySelector(`input[name="${id}"]:checked`);
+            }
+        }
+
+        function handleResult(id, isCorrect) {
+            const card = document.getElementById(id);
+            const feedback = document.getElementById(`${id}-feedback`);
+            const resetBtn = document.getElementById(`${id}-reset`);
+            const checkBtn = document.getElementById(`${id}-btn`);
+
+            if (isCorrect) {
+                card.classList.add('correct');
+                state[id] = true;
+                feedback.style.display = 'block';
+                feedback.classList.add('text-blue-900');
+            } else {
+                card.classList.add('incorrect');
+                feedback.style.display = 'block';
+                feedback.classList.add('text-red-700');
+                resetBtn.classList.remove('hidden');
+            }
+
+            document.querySelectorAll(`#${id} input, #${id} select, #${id} .btn-check`).forEach(i => i.disabled = true);
+            checkAllDone();
+        }
+
+        function checkMCQ(id, ans) {
+            const val = document.querySelector(`input[name="${id}"]:checked`).value;
+            handleResult(id, val === ans);
+        }
+
+        function checkTF(id, ans) {
+            const val = document.querySelector(`input[name="${id}"]:checked`).value === 'true';
+            handleResult(id, val === ans);
+        }
+
+        function checkSelect(id, ansArray) {
+            const values = Array.from(document.querySelectorAll(`#${id} select`)).map(s => s.value);
+            handleResult(id, JSON.stringify(values) === JSON.stringify(ansArray));
+        }
+
+        function resetQuestion(id) {
+            const card = document.getElementById(id);
+            card.classList.remove('correct', 'incorrect');
+            document.getElementById(`${id}-feedback`).style.display = 'none';
+            document.getElementById(`${id}-reset`).classList.add('hidden');
+            
+            const inputs = document.querySelectorAll(`#${id} input, #${id} select`);
+            inputs.forEach(i => {
+                i.disabled = false;
+                if(i.type === 'radio') i.checked = false;
+                if(i.tagName === 'SELECT') i.selectedIndex = 0;
+            });
+            document.getElementById(`${id}-btn`).disabled = true;
+        }
+
+        function checkAllDone() {
+            if (Object.values(state).every(v => v)) {
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-blue-600');
+                nextBtn.classList.add('bg-green-600', 'scale-105', 'shadow-lg');
+            }
+        }
+
+        window.onload = () => {
+            initQuizzes();
+        };
+    </script>
+</body>
+</html>
